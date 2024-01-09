@@ -29,6 +29,7 @@ public class UserAccount extends AuditingFields {
 
     protected UserAccount() {}
 
+    // 생성자 Entity와 직결되기 때문에 다른 클래스에서 가져다 사용하면 안된다. 따라서 private로 막아주면서 내부에서 메서드를 통해 생성자를 반환하는 방식으로 진행해야 한다.
     private UserAccount(String userId, String userPassword, String email, String nickname, String memo, String createdBy) {
         this.userId = userId;
         this.userPassword = userPassword;
