@@ -19,10 +19,16 @@ public record BoardPrincipal(
         Collection<? extends GrantedAuthority> authorities,         // 권한 종류 모음
         String email,
         String nickname,
-        String memo
-) implements UserDetails{       // UserDetails 클래스 상속받아 사용 (이미 만들어져 있는 클래스로 유저에 관해 기본 값들을 반환해주는 메서드들의 집합)
+        String memo,
+        Map<String,Object> oAuth2Attributes
 
-    public static BoardPrincipal of(String username, String password, String email, String nickname, String memo) {
+) implements UserDetails, OAuth2User{       // UserDetails 클래스 상속받아 사용 (이미 만들어져 있는 클래스로 유저에 관해 기본 값들을 반환해주는 메서드들의 집합)
+
+    public static BoardPrincipal of(String username, String password, String email, String nickname, String memo){
+        return of(username, password, email, nickname, memo,Map.of());
+    }
+
+    public static BoardPrincipal of(String username, String password, String email, String nickname, String memo, Map<String,Object> oAuth2Attributes) {
         // 지금은 인증만 하고 권한을 다루고 있지 않아서 임의로 세팅한다.
         Set<RoleType> roleTypes = Set.of(RoleType.USER);
 
@@ -36,7 +42,8 @@ public record BoardPrincipal(
                 ,
                 email,
                 nickname,
-                memo
+                memo,
+                oAuth2Attributes
         );
     }
 
@@ -73,9 +80,11 @@ public record BoardPrincipal(
     @Override public boolean isAccountNonLocked() { return true; }
     @Override public boolean isCredentialsNonExpired() { return true; }
     @Override public boolean isEnabled() { return true; }
+    @Override
+    public Map<String, Object> getAttributes() { return oAuth2Attributes; }
+    @Override
+    public String getName() { return username; }
 
-    
-    
     // 유저 권한 종류
     public enum RoleType {
         USER("ROLE_USER");
