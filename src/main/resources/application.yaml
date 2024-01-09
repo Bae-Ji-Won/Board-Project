@@ -25,22 +25,28 @@ spring:
     base-path: /api
     detection-strategy: annotated
   thymeleaf3.decoupled-logic: true
-#  security:
-#    oauth2:
-#      client:
-#        registration:
-#          kakao:
-#            client-id: ${KAKAO_OAUTH_CLIENT_ID}
-#            client-secret: ${KAKAO_OAUTH_CLIENT_SECRET}
-#            authorization-grant-type: authorization_code
-#            redirect-uri: "{baseUrl}/login/oauth2/code/kakao"
-#            client-authentication-method: POST
-#        provider:
-#          kakao:
-#            authorization-uri: https://kauth.kakao.com/oauth/authorize
-#            token-uri: https://kauth.kakao.com/oauth/token
-#            user-info-uri: https://kapi.kakao.com/v2/user/me
-#            user-name-attribute: id
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ${KAKAO_OAUTH_CLIENT_ID}
+            client-secret: ${KAKAO_OAUTH_CLIENT_SECRET}
+            # OAuth 2.0 프로토콜에서 사용되는 인가 방식
+            authorization-grant-type: authorization_code
+            # 리다이렉트 uri 위치  {baseUrl} = spring에서 자동으로 기본 url 매칭시킴
+            # {}사용시 ""를 통해 묶어줘야함
+            redirect-uri: "{baseUrl}/login/oauth2/code/kakao"
+            # authentication-method api 통신 방식
+            client-authentication-method: POST
+        provider:
+          kakao:
+            # 카카오 디벨롭 메뉴얼에서 찾아서 가져오면 됨 (필요한 정보를 가져오기 위한 종류별 URL)
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            # 카카오에서 데이터를 가져올때 기준(PK)값 설정  카카오인 경우 id가 기준임
+            user-name-attribute: id
 
 ---
 
