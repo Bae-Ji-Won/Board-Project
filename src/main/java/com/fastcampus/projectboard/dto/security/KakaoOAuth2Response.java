@@ -6,13 +6,35 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @SuppressWarnings("unchecked") // TODO: Map -> Object 변환 로직이 있어 제네릭 타입 캐스팅 문제를 무시한다. 더 좋은 방법이 있다면 고려할 수 있음.
-// 카카오톡 api 문서에 api 호출시 건네받는 정보가 정해져 있음 
+// 카카오톡 api 문서에 api 호출시 건네받는 정보가 정해져 있음
+/* 아래의 구조와 같이 데이터가 넘어옴
+                {
+                        "id": 1234567890,
+                        "connected_at": "2022-01-02T00:12:34Z",
+                        "properties": {
+                        "nickname": "홍길동"
+                        },
+                        "kakao_account": {
+                        "profile_nickname_needs_agreement": false,
+                        "profile": {
+                        "nickname": "홍길동"
+                        },
+                        "has_email": true,
+                        "email_needs_agreement": false,
+                        "is_email_valid": true,
+                        "is_email_verified": true,
+                        "email": "test@gmail.com"
+                        }
+                 }
+
+ */
 public record KakaoOAuth2Response(
         Long id,
         LocalDateTime connectedAt,
         Map<String, Object> properties,
         KakaoAccount kakaoAccount
 ) {
+    // Inner Class는 외부에서 호출하게 되면 별도로 클래스를 생성해서 만드는 것이 좋음
     public record KakaoAccount(
             Boolean profileNicknameNeedsAgreement,
             Profile profile,
